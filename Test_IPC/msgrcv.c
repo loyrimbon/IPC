@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-//test
+//test commit
 typedef struct {
 	long type;
 	char texte [256];

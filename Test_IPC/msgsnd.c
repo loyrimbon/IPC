@@ -36,6 +36,7 @@ int main (int argc, char * argv [])
 		perror("msgget");
 		exit(EXIT_FAILURE);
 	}
+	//ajout du message dans la file
 	if (msgsnd(file, (void *) & message, 256, 0) <0)
 	{
 		perror("msgsnd");
