@@ -24,6 +24,7 @@ main (int argc, char * argv[])
 		perror("ftok");
 		exit(EXIT_FAILURE);
 	}
+    
 	if (sscanf(argv[2], "%ld", & type) != 1) {
 		fprintf(stderr, "Type invalide");
 		exit(EXIT_FAILURE);
@@ -32,9 +33,16 @@ main (int argc, char * argv[])
 		perror("msgget");
 		exit(EXIT_FAILURE);
 	}
-	if (msgrcv(file, (void *) & message, 256, type, 0) >= 0)
-		fprintf(stdout, "(%ld) %s \n", message.type, message.texte);
-	else
-		perror("msgrcv");
+	do
+    {
+    if (msgrcv(file, (void *) & message, 256, type, 0) >= 0)
+    {
+        if(message.type!=-2)
+            fprintf(stdout, "(%ld) %s \n", message.type, message.texte);
+    }
+    else
+        perror("msgrcv");
+    }while(strcmp(message.texte,"FIN")!=0);
+           
 	return EXIT_SUCCESS;
 }
