@@ -6,24 +6,11 @@
 #include <sys/msg.h>
 #include <pthread.h>
 
-void *read_mq(void* null)
-{
-	
-}
-void *write_mq(void* null)
-{
-	
-}
+
+
 int main()
 {
-    int rc, i;
-    pthread_t tid;
-
-    rc = pthread_create(&tid, &attr, read_mq, NULL);
-    if(rc) {
-		perror("Erreur lors de la création du thread");
-		exit(-1);
-    }
-
+    FILE *f_snd = popen("./msgsnd","r");
+    FILE *f_rcv = popen("./msgrcv","r");
     return 0;
 }
