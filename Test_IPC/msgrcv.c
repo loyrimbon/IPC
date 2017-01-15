@@ -4,16 +4,15 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-
+#include <unistd.h>
+#include "libIPC_uzi.h"
 //test commit
-typedef struct {
-	long type;
-	char texte [256];
-} message_t;
 
-main (int argc, char * argv[])
+
+int main (int argc, char * argv[])
 {
-	key_t key;
+	 printf("MSGRCV\n");
+    key_t key;
 	message_t message;
 	int file;
 	long type;
@@ -36,6 +35,7 @@ main (int argc, char * argv[])
 	}
 	do
     {
+        sleep(3);
     if (msgrcv(file, (void *) & message, 256, type, 0) >= 0)
     {
         if(message.type!=-2)
@@ -44,6 +44,8 @@ main (int argc, char * argv[])
     else
         perror("msgrcv");
     }while(strcmp(message.texte,"FIN")!=0);
+    
+    removeIPC(file);
            
 	return EXIT_SUCCESS;
 }

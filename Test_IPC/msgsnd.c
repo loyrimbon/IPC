@@ -12,7 +12,8 @@ typedef struct {
 } message_t;*/
 int main (int argc, char * argv [])
 {
-	key_t key;
+    printf("MSGSND\n");
+    key_t key;
 	message_t message;
 	int file;
 	if (argc != 4)
@@ -31,20 +32,27 @@ int main (int argc, char * argv [])
 		fprintf(stderr, "Type invalide");
 		exit(EXIT_FAILURE);
 	}
-	strncpy (message.texte, argv[3], 255);
-	message.texte[255] = '\0';
-	//if ((file = msgget(key, IPC_CREAT | 0600)) == -1)
+   //if ((file = msgget(key, IPC_CREAT | 0600)) == -1)
 	if ((file = createIPC(key)) == -1)
 	{
 		perror("msgget");
 		exit(EXIT_FAILURE);
 	}
+    for(int i=0;i<10;i++){
+        
+        
+        strncpy (message.texte, argv[3], 255);
+        message.texte[255] = '\0';
+        
 	//ajout du message dans la file
 	//if (msgsnd(file, (void *) & message, 256, 0) <0)
-	if (writeIPC(file, (void *) & message) <0)
-	{
-		perror("msgsnd");
-		exit(EXIT_FAILURE);
-	}
+           if (writeIPC(file, (void *) & message) <0)
+        {
+            perror("msgsnd");
+            exit(EXIT_FAILURE);
+        }
+    }
+    
+    
 	return EXIT_SUCCESS;
 }

@@ -16,8 +16,10 @@ typedef struct _message_t{
 	char texte [256];
 } message_t;
 
+key_t getIPCKey(char* ipc_name);
 int createIPC(key_t key);
 int writeIPC(int file,char* message);
 int readIPC(int file,char* message,int size,long type, int attributs);
+int removeIPC(int file);
 
 #endif

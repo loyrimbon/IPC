@@ -38,11 +38,16 @@ int createIPC(key_t key)
  */
 int writeIPC(int file,char* message)
 {
-	msgsnd(file,message,256,0);
+	msgsnd(file,message,256,IPC_NOWAIT);
 	return 0;
 }
 int readIPC(int file,char* message,int size,long type, int attributs)
 {
 	msgrcv(file, message, size, type, attributs);
 	return 0;
+}
+
+int removeIPC(int file)
+{
+    return msgctl(file,IPC_RMID,NULL);
 }
