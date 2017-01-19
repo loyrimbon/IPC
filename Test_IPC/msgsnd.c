@@ -5,6 +5,7 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include "libIPC_uzi.h"
+#include <unistd.h>
 /*
 typedef struct {
 	long type;
@@ -13,9 +14,11 @@ typedef struct {
 int main (int argc, char * argv [])
 {
     printf("MSGSND\n");
+	sleep(6);
     key_t key;
 	message_t message;
 	int file;
+	int i;
 	if (argc != 4)
 	{
 		fprintf(stderr, "Syntaxe : %s fichier_clé type message \n",argv[0]);
@@ -38,7 +41,7 @@ int main (int argc, char * argv [])
 		perror("msgget");
 		exit(EXIT_FAILURE);
 	}
-    for(int i=0;i<10;i++){
+    for(i=0;i<10;i++){
         
         
         strncpy (message.texte, argv[3], 255);

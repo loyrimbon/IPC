@@ -7,24 +7,50 @@
 #include <pthread.h>
 #include <unistd.h>
 
+void *doSendMsg(void *c)
+{
+	char* cmd = c;
+	FILE *f_snd = popen(cmd,"w");
+}
+void *doReadMsg(void *null)
+{
 
+	FILE *f_rcv = popen("./msgrcv ./msgsnd 0","w");
+}
 int main()
 {
-    
-    
-    FILE *f_snd = popen("./msgsnd ./msgsnd 1 message","w");
-   // sleep(15);
-    FILE *f_rcv = popen("./msgrcv ./msgsnd 0","w");
-    
-    char buf[256];
+    int rc;
+    pthread_t th_snd;
+	pthread_t th_rd;
+	pthread_attr_t attr_snd;
+	
+	pthread_attr_init(&attr_snd);
+	pthread_attr_setdetachstate(&attr_snd, PTHREAD_CREATE_JOINABLE);
+	
+	rc = pthread_create(&th_snd, &attr_snd, doSendMsg, "./msgsnd ./msgsnd 1 message");
+	if (rc) {
+		perror("Erreur lors de la création du thread");
+		exit(-1);
+	}
+	/* Wait for the thread */
+	rc = pthread_join(th_snd, NULL);
+	if (rc) {
+		perror("Erreur lors du join");
+		exit(EXIT_FAILURE);
+	}
+	
+	rc = pthread_create(&th_rd, &attr_snd, doReadMsg,NULL);
+	
+	/* Wait for the thread */
+	rc = pthread_join(th_rd, NULL);
+	if (rc) {
+		perror("Erreur lors du join");
+		exit(EXIT_FAILURE);
+	}
    
-    while(fgets(buf, sizeof(buf), f_snd))
-    {
-        
-        fputs(buf,stdout);
-    }
-    pclose(f_snd);
-    pclose(f_rcv);
-    
+    pthread_attr_destroy(&attr_snd);
+	
+	pthread_exit(NULL);
+	
     return 0;
 }
